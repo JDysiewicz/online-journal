@@ -1,0 +1,31 @@
+IDEAS AND POSSIBLE IMPLEMENTATIONS
+--------------------------------------
+Back End:
+    - Dark Theme
+    - Change Password
+    - Store date and time of entries
+    - Different sections (Work, Family, Friends)
+    - Delete account
+    - Implement text editor into website (shortcuts/buttons for bold etc)
+
+Front End:
+    - Dont move to error page, us JS to prevent form submition
+    - Display datetime of entries
+    - Drop down menus for account settings
+    - Display total number of entries
+    - Different sections as floating bubbles (smoothed rectangles)
+    - Change icon theme and name 
+    - Navigation window at top (View sections, )
+    - write new entry in middle; specify to which location with pop up indow (floating)
+    - colours = mountain and river themed; light blues, light greens etc...
+    - Dark mode = moonlight theme
+    - Switch darkmode/lightmode top right (sun to moon radial switch semi circle)
+    
+
+- new accounts cant make entries - 500 internal server error
+- preset backgrounds
+
+- customise background image
+
+- linked diaries?
+- message board style maybe...?

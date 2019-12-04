@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block main %}
+<div class="apology-text">
+    <h1>{{ top | urlencode }}</h1>  <br> 
+    <h2>{{ bottom | urlencode }}</h2>
+</div>
+{% endblock %}

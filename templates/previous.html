@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+<div class="results-container">
+    <h1> Your Previous Entries</h1> <br>
+    <div class="results-display">
+
+    <form action="/delete-entry" method="post">
+        {% for entry, date, postid in entrydate|reverse %}
+            <div>
+                <h2>{{ date[0] }}</h2> <br>
+                {{ entry[0]|safe }} <br>
+                <button class="btn btn-primary" name="delete" value={{postid[0]}} type="submit">Delete entry</button>
+                <hr>
+            </div>
+        {% endfor %}
+        </div>
+    </form>
+    <div>
+        <form action="/previous" method="post">
+            <button class="btn btn-primary" type="submit">Return to HomePage</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

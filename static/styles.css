@@ -1,0 +1,93 @@
+nav .navbar-brand
+{
+    /* size for brand */
+    font-size: xx-large;
+}
+
+nav .navbar-brand .red
+{
+    color: #ea433b;
+}
+nav{
+    width: 100%;
+    color: #b666d2 !important
+}
+
+main .form-control
+{
+    /* center form controls */
+    display: inline-block;
+
+    /* override Bootstrap's 100% width for form controls */
+    width: auto;
+}
+
+main
+{
+    /* scroll horizontally as needed */
+    overflow-x: auto;
+
+    /* center contents */
+    text-align: center;
+}
+
+main img
+{
+    /* constrain images on small screens */
+    max-width: 100%;
+}
+
+.background{
+    background-image: url(https://uhdwallpapers.org/uploads/converted/18/04/30/dramatic-sunset-1920x1080_76598-mm-90.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.index-h2{
+    color: #ea433b;
+    font-weight: bold;
+}
+.index-h3{
+    color: white;
+}
+
+.container-write{
+    background-color:#FFF;
+    border-radius: 25px;
+    height: auto; 
+}
+
+.container-input{
+    height:100%;
+    width:100%;
+}
+
+.results-container{
+    color: white;
+    border-radius: 25px;
+    background-color: teal;
+    overflow: hidden
+}
+
+.results-display{
+    
+    width:100%;
+}
+
+hr{
+    color: white;
+    width: auto;
+    border: 2px solid white
+}
+
+.temp-message{
+    color: white;
+}
+
+.apology-text{
+    color:white;
+}

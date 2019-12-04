@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+<script src="../static/js/ckeditor/ckeditor.js"></script>
+<div class="container-write">
+
+    <div class="container-input">
+            <form action="/write" method="post">
+                <textarea name="entry" id="editor1" rows="10" cols="80">
+                    Need to get something off your chest?
+                </textarea>
+                <button class="btn btn-primary" type="submit">Store Entry</button>
+                <script>
+                    CKEDITOR.replace( 'editor1' );
+                </script>
+            </form>
+            
+    </div>
+
+    
+
+</div>
+    
+       
+{% endblock %}

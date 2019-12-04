@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class="">
+        <h2 class="index-h2">Welcome Back</h2>
+        <h3 class="index-h3" id="date"></h3>
+        <h3 class="index-h3" id="time"></h3>
+        <br>
+        <button class="btn btn-primary" id="write-button">Write About Your Day</button>
+    </div>
+        <script>
+            var dt = new Date();
+            document.getElementById("date").innerHTML = dt.toLocaleDateString();
+        </script>
+        <script>
+            var dt = new Date();
+            document.getElementById("time").innerHTML = dt.toLocaleTimeString();
+        </script>
+
+        <script>
+            document.getElementById("write-button").onclick = function(){
+                location.href="/write";
+            };
+
+
+        </script>
+       
+{% endblock %}
