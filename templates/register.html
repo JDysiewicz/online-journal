@@ -7,8 +7,9 @@
 {% block main %}
     <form action="/register" method="post">
         <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required/>
+            <input autocomplete="off" autofocus class="form-control" id = "username" name="username" placeholder="Username" type="text" required/>
         </div>
+        <div id="msg"></div>
         <div class="form-group">
             <input class="form-control" name="password" placeholder="Password" type="password" required/>
         </div>
@@ -17,4 +18,33 @@
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
+
+    <script type="text/javascript">
+		$(document).ready(function() {
+			$("#username").on('input', function(e) {
+				$('#msg').hide();
+				
+				if ($('#username').val() == null || $('#username').val() == "") {
+					$('#msg').show();
+					$("#msg").html("Username is required field.").css("color", "red");
+				} else {
+					$.ajax({
+						type: "POST",
+						url: "http://127.0.0.1:5000/register",
+						data: $('#signupform').serialize(),
+						dataType: "html",
+						cache: false,
+						success: function(msg) {
+							$('#msg').show();
+							$("#msg").html(msg);
+						},
+						error: function(jqXHR, textStatus, errorThrown) {
+							$('#msg').show();
+							$("#msg").html(textStatus + " " + errorThrown);
+						}
+					});
+				}
+			});
+		});
+	</script>
 {% endblock %}
