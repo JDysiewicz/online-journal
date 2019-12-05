@@ -5,13 +5,27 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/login" method="post" class="background">
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text" required>
+    <form action="/login" method="post" class="background" role="form">
+        <div class="form-group" >
+            <input autocomplete="off" autofocus class="form-control" id = "username" name="username" placeholder="Username" type="text" required>
         </div>
         <div class="form-group">
-            <input class="form-control" name="password" placeholder="Password" type="password" required>
+            <input class="form-control" name="password" placeholder="Password" id="password" type="password" required>
         </div>
         <button class="btn btn-primary" type="submit">Log In</button>
     </form>
+
+    <script>
+		$("#username, #password").blur(function(){
+			$.get("/checkLogin", {username: $("#username").val(), password: $("#password").val()} , function(data){
+				if (!data){
+					$("form").submit(function(e){
+						e.preventDefault();
+						alert("Incorrect username or password");
+						location.reload();
+					});
+				}
+			});
+		});
+	</script>
 {% endblock %}

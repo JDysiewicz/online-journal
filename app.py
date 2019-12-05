@@ -41,6 +41,45 @@ Session(app)
 def index():
     return render_template("index.html", date = datetime.now())
 
+
+@app.route("/checkName")
+def checkName():
+    conn = sqlite3.connect("project.db")
+    db = conn.cursor()
+    username = request.args.get('username')
+    checkName = list(db.execute("SELECT username FROM users WHERE username = :username", {"username": username}))
+    conn.commit()
+    conn.close()
+    if len(checkName) > 0:
+        return jsonify(False)
+    else:
+        return jsonify(True)
+
+@app.route("/checkPass")
+def checkPass():
+    password = request.args.get('password')
+    confirmation = request.args.get('confirmation')
+    if password == confirmation:
+        return jsonify(True)
+    else:
+        return jsonify(False)      
+
+# @app.route("/checkLogin")
+# def checkLogin():
+#     conn = sqlite3.connect("project.db")
+#     db = conn.cursor()
+#     username = request.args.get('username')
+#     password = request.args.get('password')
+#     rows = list(db.execute("SELECT * FROM users WHERE username = :username", {"username": username}))
+#     conn.close()
+
+#     if rows and check_password_hash(rows[0][2], password):
+#         return jsonify(True)
+
+#     else: 
+#         return jsonify(False)
+           
+
 @app.route("/previous", methods=["GET", "POST"])
 def previous():
     if request.method == "GET":
@@ -52,7 +91,7 @@ def previous():
         dates = list(db.execute("SELECT date FROM entries WHERE id = :id", {"id":session["user_id"]}))
         postid = list(db.execute("SELECT postid FROM entries WHERE id = :id", {"id":session["user_id"]}))
         conn.commit()
-        conn.close
+        conn.close()
         return render_template("previous.html", entrydate = zip(entries,dates,postid))
     else:
         return redirect("/")
@@ -120,7 +159,7 @@ def write():
             db.execute("INSERT INTO entries(id, entry, date, time) VALUES(:id, :entry, :date, :time)", {"id": session["user_id"], "entry": request.form.get("entry"), "date": date.today(), "time": datetime.now()})
             conn.commit()
             
-        conn.close
+        conn.close()
         return redirect("/")
 
     else:
