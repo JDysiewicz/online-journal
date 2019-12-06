@@ -17,7 +17,7 @@
         <div class="form-group">
             <input class="form-control" name="confirmation" id = "confirmation" placeholder="Re-type password" type="password" required/>
         </div>
-        <button class="btn btn-primary" type="submit">Register</button>
+        <button class="btn btn-primary" type="submit" id="#button">Register</button>
 	</form>
 	
 	<script>
@@ -33,9 +33,9 @@
 			});
 		});
 	</script>
-
+<!-- Need some way to call ajax on button click; that would solve both these issues?-->
 	<script>
-		$("#confirmation").blur(function(){
+		$("#password").blur(function(){
 			$.get("/checkPass", {password: $("#password").val(), confirmation: $("#confirmation").val()} , function(data){
 				if (!data){
 					$("form").submit(function(e){

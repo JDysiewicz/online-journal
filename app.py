@@ -59,25 +59,30 @@ def checkName():
 def checkPass():
     password = request.args.get('password')
     confirmation = request.args.get('confirmation')
+    print(password)
+    print(confirmation)
     if password == confirmation:
         return jsonify(True)
     else:
         return jsonify(False)      
 
-# @app.route("/checkLogin")
-# def checkLogin():
-#     conn = sqlite3.connect("project.db")
-#     db = conn.cursor()
-#     username = request.args.get('username')
-#     password = request.args.get('password')
-#     rows = list(db.execute("SELECT * FROM users WHERE username = :username", {"username": username}))
-#     conn.close()
+@app.route("/checkLogin")
+def checkLogin():
+    password = request.args.get('password')
+    username = request.args.get('username')
+    conn = sqlite3.connect("project.db")
+    db = conn.cursor()
+    checkLog = list(db.execute("SELECT * FROM users WHERE username = :username", {"username": request.args.get('username')}))
+    conn.commit()
+    conn.close()
 
-#     if rows and check_password_hash(rows[0][2], password):
-#         return jsonify(True)
+    if (len(checkLog) == 0):
+        return jsonify(False) 
 
-#     else: 
-#         return jsonify(False)
+    if not check_password_hash(checkLog[0][2], request.args.get('password')):
+        return jsonify(False)
+    print("REWR")
+    return jsonify(True)
            
 
 @app.route("/previous", methods=["GET", "POST"])
