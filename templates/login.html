@@ -16,15 +16,23 @@
     </form>
 
     <script>
-		$("#password, #username").blur(function(){
-			$.get("/checkLogin", {password: $("#password").val(), username: $("#username").val()} , function(data){
-				if (!data){
-					$("form").submit(function(e){
-						e.preventDefault();
-						alert("Invalid username/password");
-					})
-				};
-			});
-		});
-	</script>
+        $("#form").submit(function(e) {
+            e.preventDefault();
+            var form = $(this)
+        
+            $.ajax({
+                type: "POST",
+                url: "/checkLogin",
+                data:  form.serialize(),
+                success: function(data){
+                    if(data == "false"){
+                        alert("Incorrect username/password!");
+                        return redirect("/login")
+                    }
+                    form.unbind()
+                    $("#form").submit()
+                }					
+                });
+        })
+    </script>
 {% endblock %}

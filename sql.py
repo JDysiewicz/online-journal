@@ -1,16 +1,10 @@
 import sqlite3
 
-conn = sqlite3.connect("cs50 project//submissions.db")
+conn = sqlite3.connect("submissions.db")
 
 db = conn.cursor()
 
-db.execute("""CREATE TABLE entries(
-                id INTEGER,
-                entry TEXT,
-                date TEXT,
-                time TEXT,
-                postid INTEGER PRIMARY KEY AUTOINCREMENT 
-                )""")
+db.execute("""DELETE FROM entries""")
 
 conn.commit()
 conn.close

@@ -7,7 +7,7 @@
 {% block main %}
 
 
-    <form action="/register" method="post" role="form">
+    <form id="form1" action="/register" method="post" role="form">
         <div class="form-group">
 			<input autocomplete="off" autofocus class="form-control" id = "username" name="username" placeholder="Username" type="text" required/>
 		</div>
@@ -21,20 +21,33 @@
 	</form>
 	
 	<script>
-		$("#username").blur(function(){
-			$.get("/checkName", {username: $("#username").val()} , function(data){
-				if (!data){
-					$("form").submit(function(e){
-						e.preventDefault();
-						alert("Username already taken");
-						location.reload();
-					});
-				}
-			});
-		});
+		$("#form1").submit(function(e) {
+			e.preventDefault();
+			password = document.getElementById("password").value
+			conf = document.getElementById("confirmation").value
+			if (password != conf){
+				alert("Passwords do not match!");
+				return redirect("/reigster")
+			}
+			var form = $(this)
+		
+			$.ajax({
+				type: "POST",
+				url: "/checkName",
+				data:  form.serialize(),
+				success: function(data){
+					if(data == "false"){
+						alert("Username already taken!");
+						return redirect("/reigster")
+					}
+					form.unbind()
+					$("#form1").submit()
+				}					
+				});
+		})
 	</script>
 <!-- Need some way to call ajax on button click; that would solve both these issues?-->
-	<script>
+	<!-- <script>
 		$("#password").blur(function(){
 			$.get("/checkPass", {password: $("#password").val(), confirmation: $("#confirmation").val()} , function(data){
 				if (!data){
@@ -45,7 +58,7 @@
 					});
 				}
 			});
-		});
+		}); -->
 	</script>
 	
 {% endblock %}

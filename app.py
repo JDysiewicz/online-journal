@@ -42,47 +42,35 @@ def index():
     return render_template("index.html", date = datetime.now())
 
 
-@app.route("/checkName")
+@app.route("/checkName", methods=["POST"])
 def checkName():
     conn = sqlite3.connect("project.db")
     db = conn.cursor()
-    username = request.args.get('username')
+    username = request.form.get('username')
     checkName = list(db.execute("SELECT username FROM users WHERE username = :username", {"username": username}))
     conn.commit()
     conn.close()
     if len(checkName) > 0:
-        return jsonify(False)
+        return ("false")
     else:
-        return jsonify(True)
+        return ("true")
+   
 
-@app.route("/checkPass")
-def checkPass():
-    password = request.args.get('password')
-    confirmation = request.args.get('confirmation')
-    print(password)
-    print(confirmation)
-    if password == confirmation:
-        return jsonify(True)
-    else:
-        return jsonify(False)      
-
-@app.route("/checkLogin")
+@app.route("/checkLogin", methods=["POST"])
 def checkLogin():
-    password = request.args.get('password')
-    username = request.args.get('username')
     conn = sqlite3.connect("project.db")
     db = conn.cursor()
-    checkLog = list(db.execute("SELECT * FROM users WHERE username = :username", {"username": request.args.get('username')}))
+    checkLog = list(db.execute("SELECT * FROM users WHERE username = :username", {"username": request.form.get('username')}))
     conn.commit()
     conn.close()
 
     if (len(checkLog) == 0):
-        return jsonify(False) 
+        return ("false")
 
-    if not check_password_hash(checkLog[0][2], request.args.get('password')):
-        return jsonify(False)
-    print("REWR")
-    return jsonify(True)
+    if not check_password_hash(checkLog[0][2], request.form.get('password')):
+        return "false"
+
+    return "true"
            
 
 @app.route("/previous", methods=["GET", "POST"])
@@ -126,22 +114,9 @@ def login():
         conn = sqlite3.connect("project.db")
         db = conn.cursor()
 
-        # Ensure username was submitted
-        if not request.form.get("username"):
-            return apology("must provide username", 403)
-
-        # Ensure password was submitted
-        elif not request.form.get("password"):
-            return apology("must provide password", 403)
-
-        # Query database for username
+        # # Query database for username
         rows = list(db.execute("SELECT * FROM users WHERE username = :username",
                           {"username": request.form.get("username")}))
-        if not rows:
-            return apology("Invalid Username and/or Password", 403)
-        # Ensure password is correct
-        if not check_password_hash(rows[0][2], request.form.get("password")):
-            return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
         session["user_id"] = rows[0][0]
@@ -190,19 +165,6 @@ def register():
         conn = sqlite3.connect("project.db")
         db = conn.cursor()
 
-        # error checking
-        if not request.form.get("username"):
-            return apology("No Username", 400)
-
-        elif not request.form.get("password"):
-            return apology("No password", 400)
-
-        elif not request.form.get("confirmation"):
-            return apology("Please confirm your password", 400)
-
-        elif (request.form.get("password") != request.form.get("confirmation")):
-            return apology("Passwords do not match", 400)
-
         username = request.form.get("username")
 
         # encrypt password
@@ -210,8 +172,6 @@ def register():
 
         taken = list(db.execute("SELECT username FROM users WHERE username = :username", {"username": username}))
         print(taken)
-        if taken != []:
-            return apology("Sorry, that username is already taken")
         db.execute("INSERT INTO users(username, hash) VALUES (:username, :hash)", {"username": username, "hash": hash})
         conn.commit()
         result = list(db.execute("SELECT id FROM users WHERE username = :username AND hash = :hash", {"username": username, "hash": hash}))
@@ -221,25 +181,6 @@ def register():
         return redirect("/login")
     else:
         return render_template("register.html")
-
-
-
-# Change Password Tab
-@app.route("/password", methods=["GET", "POST"])
-@login_required
-def password():
-    if request.method == "POST":
-        if not (request.form.get("password")) or not request.form.get("password-conf"):
-            return apology("Please enter your desired new password")
-        if request.form.get("password") != request.form.get("password-conf"):
-            return apology("Your passwords did not match, please try again")
-
-        hash = generate_password_hash(request.form.get("password"))
-        db.execute("UPDATE users SET hash = :hash WHERE id = :id", hash=hash, id=session["user_id"])
-        return redirect("/")
-
-    else:
-        return render_template("password.html")
 
 
 def errorhandler(e):
