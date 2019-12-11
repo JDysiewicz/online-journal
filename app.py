@@ -99,6 +99,37 @@ def delete_entry():
     conn.close()
     return redirect("/previous")
 
+@app.route("/deleteAccount", methods=["POST", "GET"])
+def deleteAccount():
+    if request.method == "POST":
+        idd = session["user_id"]
+
+        # Deletes all entries
+        conn = sqlite3.connect("submissions.db")
+        db = conn.cursor()
+        db.execute("""DELETE FROM entries WHERE id = :id""", {"id": idd})
+        conn.commit()
+        conn.close()
+
+        # Deletes user
+        conn = sqlite3.connect("project.db")
+        db = conn.cursor()
+        db.execute("""DELETE FROM users WHERE id = :id""", {"id": idd})
+        conn.commit()
+        conn.close()
+
+        # Forget any user_id
+        session.clear()
+
+        # Redirect user to login form
+        return redirect("/")
+    else:
+        return render_template("delete-account.html")
+
+
+
+
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -134,7 +165,6 @@ def write():
     if request.method == "POST":
         conn = sqlite3.connect("submissions.db")
         db = conn.cursor()
-        print(session["user_id"])
         if request.form.get("entry"):
             db.execute("INSERT INTO entries(id, entry, date, time) VALUES(:id, :entry, :date, :time)", {"id": session["user_id"], "entry": request.form.get("entry"), "date": date.today(), "time": datetime.now()})
             conn.commit()
@@ -171,12 +201,10 @@ def register():
         hash = generate_password_hash(request.form.get("password"))
 
         taken = list(db.execute("SELECT username FROM users WHERE username = :username", {"username": username}))
-        print(taken)
         db.execute("INSERT INTO users(username, hash) VALUES (:username, :hash)", {"username": username, "hash": hash})
         conn.commit()
         result = list(db.execute("SELECT id FROM users WHERE username = :username AND hash = :hash", {"username": username, "hash": hash}))
         session["user_id"] = result
-        print (session["user_id"])
         conn.close()
         return redirect("/login")
     else:
